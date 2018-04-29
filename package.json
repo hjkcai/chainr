@@ -1,0 +1,19 @@
+{
+  "name": "calling-request",
+  "version": "0.1.0",
+  "description": "Using multiple function calls to make requests",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jingkun Hua <huajingkun1214@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "tslint": "^5.9.1",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.8.3"
+  }
+}
