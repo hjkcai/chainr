@@ -1,15 +1,26 @@
-import { ChainrProxyHandler } from './handler'
+import {
+  Chainr,
+  ChainrTarget,
+  ChainrDispatch,
+  DISPATCH
+} from './types'
 
-export type ChainrDispatch = (this: any, keys: PropertyKey[], args: any[]) => any
+export class ChainrProxyHandler implements ProxyHandler<ChainrTarget> {
+  private keys: PropertyKey[]
 
-export interface Chainr {
-  [key: string]: Chainr
-}
+  public constructor (keys: PropertyKey[]) {
+    this.keys = keys
+  }
 
-export const DISPATCH = Symbol('ChainrHandler')
+  public get (target: ChainrTarget, key: PropertyKey): Chainr {
+    const keys = [...this.keys, key]
+    return createProxy(keys, target)
+  }
 
-export interface ChainrTarget {
-  [DISPATCH]: ChainrDispatch
+  public apply (target: ChainrTarget, thisArg: any, args: any[]) {
+    const dispatch = target[DISPATCH]
+    return dispatch.call(thisArg, this.keys, args)
+  }
 }
 
 export function createProxy (keys: PropertyKey[], target: ChainrTarget): Chainr {
