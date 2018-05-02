@@ -1,63 +1,63 @@
-import * as deepmerge from 'deepmerge'
-import { dispatchRequest } from './dispatch'
-import { CompiledRequestRules } from './rule'
-import { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { createProxy, RequestProxy, RequestProxyTarget } from './proxy'
+import {
+  createProxy,
+  Chainr, ChainrTarget,
+  CHAINR_HANDLER, CHAINR_TARGET_DATA
+} from './proxy'
 
-export interface RequestProxyHandlerOptions {
-  rules: CompiledRequestRules[],
-  config: AxiosRequestConfig,
-  instance: AxiosInstance,
-  urlParts: string[]
+export interface ChainrDispatchParameter<T> {
+  args: any[],
+  keys: string[],
+  data?: T,
+  thisArg: any
 }
 
-export class RequestProxyHandler implements RequestProxyHandlerOptions, ProxyHandler<RequestProxyTarget> {
-  public rules: CompiledRequestRules[]
-  public config: AxiosRequestConfig
-  public instance: AxiosInstance
-  public urlParts: string[]
+export interface ChainrHandler<T> {
+  parseKey? (key: PropertyKey): string,
+  dispatch (params: ChainrDispatchParameter<T>): any
+}
 
-  public constructor ({ rules, config, instance, urlParts }: RequestProxyHandlerOptions) {
-    this.rules = rules
-    this.config = config
-    this.instance = instance
-    this.urlParts = urlParts
+export class ChainrProxyHandler<T> implements ProxyHandler<ChainrTarget<T>> {
+  private keys: string[]
+
+  public constructor (keys: string[]) {
+    this.keys = keys
   }
 
-  public get (target: RequestProxyTarget, key: PropertyKey): RequestProxy {
-    const stringKey = this.parsePropertyKey(key)
-    const urlParts = [...this.urlParts, stringKey]
+  public get (target: ChainrTarget<T>, key: PropertyKey): Chainr<T> {
+    const { parseKey } = target[CHAINR_HANDLER]
+    const newKey = this.parsePropertyKey(key, parseKey)
 
-    return createProxy(this.clone({ urlParts }))
+    const keys = [...this.keys, newKey]
+    return createProxy(keys, target)
   }
 
-  public apply (target: RequestProxyTarget, thisArg: any, [data, options]: any[]) {
-    if (options == null || typeof options !== 'object') {
-      options = {}
-    }
+  public apply (target: ChainrTarget<T>, thisArg: any, args: any[]) {
+    const data = target[CHAINR_TARGET_DATA]
+    const { keys } = this
+    const { dispatch } = target[CHAINR_HANDLER]
 
-    const config: AxiosRequestConfig = deepmerge.all([this.config, { data }, options])
-    return dispatchRequest(this.clone({ config }))
+    return dispatch({ args, keys, data, thisArg })
   }
 
   public set (): never {
-    throw new Error('Cannot assgin properties of the request proxy')
+    throw new TypeError('Cannot set properties on the chainr instance')
+  }
+
+  public defineProperty (): never {
+    throw new TypeError('Cannot define properties on the chainr instance')
   }
 
   public enumerate () {
     return []
   }
 
-  private clone (options: Partial<RequestProxyHandlerOptions> = {}): RequestProxyHandlerOptions {
-    return {
-      ...(this as RequestProxyHandlerOptions),
-      ...options
+  private parsePropertyKey (key: PropertyKey, parser: ChainrHandler<T>['parseKey']): string {
+    if (parser) {
+      key = parser(key)
     }
-  }
 
-  private parsePropertyKey (key: PropertyKey): string {
-    if (typeof key === 'symbol') {
-      throw new TypeError('Cannot use Symbols as a part of the request')
+    if (typeof key !== 'string') {
+      throw new TypeError('Cannot use Symbols as a part of the chainr key')
     }
 
     return key.toString()

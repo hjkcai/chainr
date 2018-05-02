@@ -1,34 +1,32 @@
-import { compileRules, RequestRule } from './rule'
-import { createProxy, RequestProxy } from './proxy'
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import {
+  createProxy,
+  Chainr, ChainrTarget,
+  CHAINR_HANDLER, CHAINR_TARGET_DATA
+} from './proxy'
 
-export interface RequestConfig extends AxiosRequestConfig {
-  rules?: RequestRule[]
+import { ChainrHandler } from './handler'
+
+export function createTarget<T> (handler: ChainrHandler<T>, data?: T): ChainrTarget<T> {
+  const noop = () => { /* empty */ }
+  return Object.assign(noop, {
+    [CHAINR_HANDLER]: handler,
+    [CHAINR_TARGET_DATA]: data
+  })
 }
 
-export function createInstance (config?: RequestConfig): RequestProxy
-export function createInstance (instance: AxiosInstance, config?: RequestConfig): RequestProxy
-export function createInstance (
-  instance: AxiosInstance | RequestConfig = axios,
-  config: RequestConfig = {}
-): RequestProxy {
-  if (instance != null && typeof instance === 'object') {
-    config = instance
-    instance = axios
+function createInstance<T> (dispatch: ChainrHandler<T>['dispatch'], data?: T): Chainr<T>
+function createInstance<T> (handler: ChainrHandler<T>, data?: T): Chainr<T>
+function createInstance<T> (dispatchOrHandler: ChainrHandler<T>['dispatch'] | ChainrHandler<T>, data?: T): Chainr<T> {
+  let target: ChainrTarget<T>
+  if (typeof dispatchOrHandler === 'object' && typeof dispatchOrHandler.dispatch === 'function') {
+    target = createTarget(dispatchOrHandler, data)
+  } else if (typeof dispatchOrHandler === 'function') {
+    target = createTarget({ dispatch: dispatchOrHandler }, data)
+  } else {
+    throw new TypeError('Dispatch function is missing')
   }
 
-  if (config == null || typeof config !== 'object') {
-    config = {}
-  }
-
-  const rules = compileRules(config.rules || [])
-  const urlParts: string[] = []
-  return createProxy({ rules, config, instance, urlParts })
+  return createProxy([], Object.seal(target))
 }
 
-createInstance({
-  baseURL: '/',
-  rules: [
-    { match: /.*/ }
-  ]
-}).insertBooks()
+export default createInstance
