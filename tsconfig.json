@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
+    "lib": ["esnext", "es5"],
     "target": "es5",
     "outDir": "dist",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
-    "strict": true
+    "sourceMap": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src"
