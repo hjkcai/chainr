@@ -4,11 +4,17 @@ import {
   ChainrDispatch, DISPATCH
 } from './proxy'
 
+function createEmptyFunction (): Function {
+  const noop: any = () => { /* empty */ }
+  delete noop.name
+  delete noop.length
+
+  return noop
+}
+
 function createTarget (dispatch: ChainrDispatch): ChainrTarget {
-  const ChainrTarget = () => { /* empty */ }
-  return Object.assign(ChainrTarget, {
-    [DISPATCH]: dispatch
-  })
+  const target = createEmptyFunction()
+  return Object.assign(target, { [DISPATCH]: dispatch })
 }
 
 export function createInstance (dispatch: ChainrDispatch): Chainr {
@@ -17,7 +23,7 @@ export function createInstance (dispatch: ChainrDispatch): Chainr {
   }
 
   const target = createTarget(dispatch)
-  return createProxy([], Object.seal(target))
+  return createProxy([], Object.freeze(target) as ChainrTarget)
 }
 
 export default createInstance
