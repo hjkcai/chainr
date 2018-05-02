@@ -1,10 +1,8 @@
 import {
   createProxy,
   Chainr, ChainrTarget,
-  DISPATCH
+  ChainrDispatch, DISPATCH
 } from './proxy'
-
-export type ChainrDispatch = (this: any, keys: PropertyKey[], args: any[]) => any
 
 export class ChainrProxyHandler implements ProxyHandler<ChainrTarget> {
   private keys: PropertyKey[]

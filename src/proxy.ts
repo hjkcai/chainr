@@ -1,4 +1,6 @@
-import { ChainrProxyHandler, ChainrDispatch } from './handler'
+import { ChainrProxyHandler } from './handler'
+
+export type ChainrDispatch = (this: any, keys: PropertyKey[], args: any[]) => any
 
 export interface Chainr {
   [key: string]: Chainr
