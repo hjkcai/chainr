@@ -5,8 +5,8 @@ import {
 } from './proxy'
 
 function createTarget (dispatch: ChainrDispatch): ChainrTarget {
-  const noop = () => { /* empty */ }
-  return Object.assign(noop, {
+  const ChainrTarget = () => { /* empty */ }
+  return Object.assign(ChainrTarget, {
     [DISPATCH]: dispatch
   })
 }
