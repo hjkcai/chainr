@@ -1,7 +1,6 @@
 import {
   Chainr,
   ChainrTarget,
-  ChainrDispatch,
   DISPATCH
 } from './types'
 
