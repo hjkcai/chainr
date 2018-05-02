@@ -6,9 +6,9 @@
   "scripts": {
     "build": "npm run build:browser:cjs && npm run build:browser:esm && npm run build:node:cjs && npm run build:node:esm",
     "build:browser:cjs": "rollup -c -i src/entry-browser.ts -f cjs -o dist/chainr.browser-cjs.js",
-    "build:browser:esm": "rollup -c -i src/entry-browser.ts -f cjs -o dist/chainr.browser-esm.js",
+    "build:browser:esm": "rollup -c -i src/entry-browser.ts -f esm -o dist/chainr.browser-esm.js",
     "build:node:cjs": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-cjs.js",
-    "build:node:esm": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-esm.js"
+    "build:node:esm": "rollup -c -i src/entry-node.ts -f esm -o dist/chainr.node-esm.js"
   },
   "author": "Jingkun Hua <huajingkun1214@gmail.com>",
   "license": "MIT",
