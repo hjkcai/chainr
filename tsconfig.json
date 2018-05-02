@@ -3,7 +3,7 @@
     "lib": ["es6"],
     "target": "es6",
     "outDir": "dist",
-    "module": "commonjs",
+    "module": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
     "strict": true,
