@@ -11,7 +11,7 @@ function createTarget (dispatch: ChainrDispatch): ChainrTarget {
   })
 }
 
-export default function createInstance (dispatch: ChainrDispatch): Chainr {
+export function createInstance (dispatch: ChainrDispatch): Chainr {
   if (typeof dispatch !== 'function') {
     throw new TypeError('Dispatch function is missing')
   }
@@ -20,4 +20,5 @@ export default function createInstance (dispatch: ChainrDispatch): Chainr {
   return createProxy([], Object.seal(target))
 }
 
+export default createInstance
 export { Chainr, ChainrDispatch }
