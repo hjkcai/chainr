@@ -1,18 +1,16 @@
-import { ChainrHandler, ChainrProxyHandler } from './handler'
+import { ChainrProxyHandler, ChainrDispatch } from './handler'
 
-export interface Chainr<T> {
-  [key: string]: Chainr<T>
+export interface Chainr {
+  [key: string]: Chainr
 }
 
-export const CHAINR_HANDLER = Symbol('ChainrHandler')
-export const CHAINR_TARGET_DATA = Symbol('ChainrTargetData')
+export const DISPATCH = Symbol('ChainrHandler')
 
-export interface ChainrTarget<T> {
-  [CHAINR_HANDLER]: ChainrHandler<T>,
-  [CHAINR_TARGET_DATA]?: T
+export interface ChainrTarget {
+  [DISPATCH]: ChainrDispatch
 }
 
-export function createProxy<T> (keys: string[], target: ChainrTarget<T>): Chainr<T> {
-  const proxy = new Proxy(target, new ChainrProxyHandler<T>(keys))
+export function createProxy (keys: PropertyKey[], target: ChainrTarget): Chainr {
+  const proxy = new Proxy(target, new ChainrProxyHandler(keys))
   return proxy as any
 }

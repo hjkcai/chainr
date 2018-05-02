@@ -1,42 +1,26 @@
 import {
   createProxy,
   Chainr, ChainrTarget,
-  CHAINR_HANDLER, CHAINR_TARGET_DATA
+  DISPATCH
 } from './proxy'
 
-export interface ChainrDispatchParameter<T> {
-  args: any[],
-  keys: string[],
-  data?: T,
-  thisArg: any
-}
+export type ChainrDispatch = (this: any, keys: PropertyKey[], args: any[]) => any
 
-export interface ChainrHandler<T> {
-  parseKey? (key: PropertyKey): string,
-  dispatch (params: ChainrDispatchParameter<T>): any
-}
+export class ChainrProxyHandler implements ProxyHandler<ChainrTarget> {
+  private keys: PropertyKey[]
 
-export class ChainrProxyHandler<T> implements ProxyHandler<ChainrTarget<T>> {
-  private keys: string[]
-
-  public constructor (keys: string[]) {
+  public constructor (keys: PropertyKey[]) {
     this.keys = keys
   }
 
-  public get (target: ChainrTarget<T>, key: PropertyKey): Chainr<T> {
-    const { parseKey } = target[CHAINR_HANDLER]
-    const newKey = this.parsePropertyKey(key, parseKey)
-
-    const keys = [...this.keys, newKey]
+  public get (target: ChainrTarget, key: PropertyKey): Chainr {
+    const keys = [...this.keys, key]
     return createProxy(keys, target)
   }
 
-  public apply (target: ChainrTarget<T>, thisArg: any, args: any[]) {
-    const data = target[CHAINR_TARGET_DATA]
-    const { keys } = this
-    const { dispatch } = target[CHAINR_HANDLER]
-
-    return dispatch({ args, keys, data, thisArg })
+  public apply (target: ChainrTarget, thisArg: any, args: any[]) {
+    const dispatch = target[DISPATCH]
+    return dispatch.call(thisArg, this.keys, args)
   }
 
   public set (): never {
@@ -49,17 +33,5 @@ export class ChainrProxyHandler<T> implements ProxyHandler<ChainrTarget<T>> {
 
   public enumerate () {
     return []
-  }
-
-  private parsePropertyKey (key: PropertyKey, parser: ChainrHandler<T>['parseKey']): string {
-    if (parser) {
-      key = parser(key)
-    }
-
-    if (typeof key !== 'string') {
-      throw new TypeError('Cannot use Symbols as a part of the chainr key')
-    }
-
-    return key.toString()
   }
 }
