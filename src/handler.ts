@@ -20,16 +20,4 @@ export class ChainrProxyHandler implements ProxyHandler<ChainrTarget> {
     const dispatch = target[DISPATCH]
     return dispatch.call(thisArg, this.keys, args)
   }
-
-  public set (): never {
-    throw new TypeError('Cannot set properties on the chainr instance')
-  }
-
-  public defineProperty (): never {
-    throw new TypeError('Cannot define properties on the chainr instance')
-  }
-
-  public enumerate () {
-    return []
-  }
 }
