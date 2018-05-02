@@ -4,11 +4,19 @@
   "description": "Chaining your magic methods",
   "main": "dist/index.js",
   "scripts": {
+    "build": "npm run build:browser:cjs && npm run build:browser:esm && npm run build:node:cjs && npm run build:node:esm",
+    "build:browser:cjs": "rollup -c -i src/entry-browser.ts -f cjs -o dist/chainr.browser-cjs.js",
+    "build:browser:esm": "rollup -c -i src/entry-browser.ts -f cjs -o dist/chainr.browser-esm.js",
+    "build:node:cjs": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-cjs.js",
+    "build:node:esm": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-esm.js"
   },
   "author": "Jingkun Hua <huajingkun1214@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^10.0.0",
+    "rollup": "^0.58.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-typescript2": "^0.13.0",
     "tslint": "^5.9.1",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.8.3"

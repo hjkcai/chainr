@@ -67,3 +67,6 @@ test/**/*.d.ts
 
 # macOS
 .DS_Store
+
+# rollup cache
+.rpt2_cache
