@@ -2,13 +2,16 @@
   "name": "chainr",
   "version": "0.1.0",
   "description": "Chaining your magic methods",
-  "main": "dist/index.js",
+  "main": "dist/chainr.node-cjs.js",
+  "module": "dist/chainr.browser-esm.js",
+  "browser": {
+    "./dist/chainr.node-cjs.js": "./dist/chainr.browser-cjs.js"
+  },
   "scripts": {
-    "build": "npm run build:browser:cjs && npm run build:browser:esm && npm run build:node:cjs && npm run build:node:esm",
+    "build": "rm -r dist && npm run build:browser:cjs && npm run build:browser:esm && npm run build:node:cjs",
     "build:browser:cjs": "rollup -c -i src/entry-browser.ts -f cjs -o dist/chainr.browser-cjs.js",
     "build:browser:esm": "rollup -c -i src/entry-browser.ts -f es -o dist/chainr.browser-esm.js",
-    "build:node:cjs": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-cjs.js",
-    "build:node:esm": "rollup -c -i src/entry-node.ts -f es -o dist/chainr.node-esm.js"
+    "build:node:cjs": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-cjs.js"
   },
   "author": "Jingkun Hua <huajingkun1214@gmail.com>",
   "license": "MIT",
