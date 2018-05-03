@@ -4,7 +4,7 @@ Chainr is a tiny utility to make you possible to call undefined methods, by usin
 [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy).
 
 ```javascript
-import { createInstance } from 'chainr'
+import { createInstance } from 'chainr-proxy'
 const chainr = createInstance(function dispatch (keys, args) {
   console.log(keys, args)
 })

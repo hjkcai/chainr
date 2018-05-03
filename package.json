@@ -1,5 +1,5 @@
 {
-  "name": "chainr",
+  "name": "chainr-proxy",
   "version": "1.0.0-alpha",
   "description": "Chaining your magic methods",
   "main": "dist/chainr.node-cjs.js",
