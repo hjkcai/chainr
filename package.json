@@ -1,6 +1,6 @@
 {
   "name": "chainr",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha",
   "description": "Chaining your magic methods",
   "main": "dist/chainr.node-cjs.js",
   "module": "dist/chainr.browser-esm.js",
@@ -8,14 +8,34 @@
   "browser": {
     "./dist/chainr.node-cjs.js": "./dist/chainr.browser-cjs.js"
   },
+  "files": [
+    "dist",
+    "src",
+    "chainr.d.ts"
+  ],
   "scripts": {
     "build": "rm -r dist && npm run build:browser:cjs && npm run build:browser:esm && npm run build:node:cjs",
     "build:browser:cjs": "rollup -c -i src/entry-browser.ts -f cjs -o dist/chainr.browser-cjs.js",
     "build:browser:esm": "rollup -c -i src/entry-browser.ts -f es -o dist/chainr.browser-esm.js",
     "build:node:cjs": "rollup -c -i src/entry-node.ts -f cjs -o dist/chainr.node-cjs.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hjkcai/chainr.git"
+  },
+  "keywords": [
+    "es6",
+    "proxy",
+    "chain",
+    "chainr",
+    "chaining"
+  ],
   "author": "Jingkun Hua <huajingkun1214@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hjkcai/chainr/issues"
+  },
+  "homepage": "https://github.com/hjkcai/chainr#readme",
   "devDependencies": {
     "@types/node": "^10.0.0",
     "rollup": "^0.58.2",
