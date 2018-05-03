@@ -4,6 +4,7 @@
   "description": "Chaining your magic methods",
   "main": "dist/chainr.node-cjs.js",
   "module": "dist/chainr.browser-esm.js",
+  "typings": "chainr.d.ts",
   "browser": {
     "./dist/chainr.node-cjs.js": "./dist/chainr.browser-cjs.js"
   },
