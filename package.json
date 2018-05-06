@@ -1,6 +1,6 @@
 {
   "name": "chainr-proxy",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-beta",
   "description": "Chaining your magic methods",
   "main": "dist/chainr.node-cjs.js",
   "module": "dist/chainr.browser-esm.js",
