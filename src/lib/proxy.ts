@@ -22,7 +22,7 @@ export class ChainrProxyHandler implements ProxyHandler<ChainrTarget> {
   }
 }
 
-export function createProxy (keys: PropertyKey[], target: ChainrTarget): Chainr {
-  const proxy = new Proxy(target, new ChainrProxyHandler(keys))
-  return proxy as any
+export function createProxy<T = Chainr> (keys: PropertyKey[], target: ChainrTarget): T {
+  const proxy: any = new Proxy(target, new ChainrProxyHandler(keys))
+  return proxy
 }

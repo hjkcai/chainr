@@ -19,11 +19,11 @@ function createTarget (dispatch: ChainrDispatch): ChainrTarget {
   return Object.assign(target, { [DISPATCH]: dispatch })
 }
 
-export function createInstance (dispatch: ChainrDispatch): Chainr {
+export function createInstance<T = Chainr> (dispatch: ChainrDispatch): T {
   if (typeof dispatch !== 'function') {
     throw new TypeError('Dispatch function is missing')
   }
 
   const target = createTarget(dispatch)
-  return createProxy([], Object.freeze(target) as ChainrTarget)
+  return createProxy<T>([], Object.freeze(target) as ChainrTarget)
 }
